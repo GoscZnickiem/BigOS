@@ -36,6 +36,13 @@
       }
     },
     {
+      "name": "release-lto",
+      "inherits": "release",
+      "cacheVariables": {
+        "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "ON"
+      }
+    },
+    {
       "name": "ninja",
       "inherits": "base",
       "generator": "Ninja"
