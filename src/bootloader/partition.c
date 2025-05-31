@@ -173,6 +173,7 @@ void partition_print(partition_t* partition) {
 	} else {
 		err( L" - GPT UUID: (missing)");
 	}
+	log(L" - FS size: %llu", partition->file_system_info->Size);
 	log(L" - Root contents:");
 
 	UINTN buff_size = SIZE_OF_EFI_FILE_INFO + 256;
