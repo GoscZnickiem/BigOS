@@ -34,4 +34,7 @@ typedef struct {
  */
 [[nodiscard]] error_t meta_config_load(void);
 
+// TODO: balls
+[[nodiscard]] error_t config_load(void);
+
 #endif // !BIGOS_BOOTLOADER_CONFIG

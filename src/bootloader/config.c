@@ -136,3 +136,9 @@ error_t meta_config_load(void) {
 
 	RETURN(ERR_NONE);
 }
+
+error_t config_load(void) {
+	START;
+
+	RETURN(ERR_NONE);
+}

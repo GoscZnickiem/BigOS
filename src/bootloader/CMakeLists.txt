@@ -69,7 +69,6 @@ add_custom_command(
 
 add_custom_command(
 	OUTPUT ${TEST_IMAGE}
-	COMMAND ${CMAKE_COMMAND} -E rm -f "${TEST_IMAGE}"
 	COMMAND ${CMAKE_COMMAND} -E copy "${TEST_SRC}" "${TEST_IMAGE}"
 	COMMENT "TEST image file at ${TEST_IMAGE}"
     VERBATIM

@@ -174,20 +174,6 @@ void partition_print(partition_t* partition) {
 		err( L" - GPT UUID: (missing)");
 	}
 	log(L" - FS size: %llu", partition->file_system_info->Size);
-	log(L" - Root contents:");
-
-	UINTN buff_size = SIZE_OF_EFI_FILE_INFO + 256;
-	EFI_FILE_INFO* file_info = AllocateZeroPool(buff_size);
-
-	START;
-	while(1) {
-		buff_size = SIZE_OF_EFI_FILE_INFO + 256;
-		EFI_STATUS status = partition->root->Read(partition->root, &buff_size, file_info);
-		if(EFI_ERROR(status) || buff_size == 0) break;
-		log(L"* %s", file_info->FileName);
-	}
-	END;
-
 	END;
 }
 
