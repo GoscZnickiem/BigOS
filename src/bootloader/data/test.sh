@@ -37,7 +37,7 @@ sudo mkdir tmp/test_src/
 echo "Hello World" | sudo tee tmp/test_src/file > /dev/null
 
 sudo mkdir tmp/test/
-sudo ln -s tmp/test_src/file tmp/test/link
+sudo ln -s /test_src/file tmp/test/link
 
 sudo blkid $PART_DEV
 
