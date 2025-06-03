@@ -19,7 +19,7 @@
 #include "error.h"
 
 typedef struct {
-	EFI_GUID partition;
+	EFI_GUID partition_guid;
 	CHAR16* path;
 	UINTN path_size;
 } meta_config_t;
