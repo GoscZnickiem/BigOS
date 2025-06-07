@@ -58,7 +58,7 @@ error_t buffer_read_u8(buffer_t buf, size_t offset, u8* out) {
 	return ERR_NONE;
 }
 
-error_t buffer_read_i8(buffer_t buf, size_t offset, u8* out) {
+error_t buffer_read_i8(buffer_t buf, size_t offset, i8* out) {
 	if (!buf.data || !out || offset >= buf.size)
 		return ERR_OUT_OF_BOUNDS;
 	*out = (i8)buf.data + offset; //NOLINT
