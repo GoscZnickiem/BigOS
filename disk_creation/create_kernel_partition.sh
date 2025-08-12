@@ -1,19 +1,19 @@
 #!/bin/bash
 set -e
 
-IMG="$1"
+IMG="test.img"
 IMG_SIZE_MB=256
 VOLUME_LABEL=KERNELVOL
 LOOP_DEV=
 
 cleanup() {
-    if mountpoint -q tmp; then
-        sudo umount tmp
+    if mountpoint -q kernel_tmp; then
+        sudo umount kernel_tmp
     fi
     if [ -n "$LOOP_DEV" ]; then
         sudo losetup -d "$LOOP_DEV"
     fi
-	rmdir tmp
+	rmdir kernel_tmp
 }
 trap cleanup EXIT
 
@@ -30,15 +30,16 @@ sleep 1
 
 sudo mkfs.ext2 -L "$VOLUME_LABEL" $PART_DEV
 
-mkdir tmp/
-sudo mount $PART_DEV tmp/
+mkdir kernel_tmp/
+sudo mount $PART_DEV kernel_tmp/
 
-sudo mkdir tmp/kernel_src/
-sudo cp kboot tmp/kernel_src/kernel.elf
+sudo mkdir kernel_tmp/kernel_src/
+sudo cp ../build/src/kernel/kernel kernel_tmp/kernel_src/kernel.elf
 
-sudo mkdir -p tmp/boot/conf
-sudo ln -s /kernel_src/kernel.elf tmp/boot/conf/kernel
+sudo mkdir -p kernel_tmp/boot/conf
+sudo ln -s /kernel_src/kernel.elf kernel_tmp/boot/conf/kernel
 
-sudo blkid $PART_DEV
+UUID=$(sudo blkid -s PARTUUID -o value $PART_DEV)
+python3 config_create.py $UUID
 
 sync

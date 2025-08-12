@@ -1,5 +1,6 @@
 import uuid
 import struct
+import argparse
 
 def uuid_to_windows_bytes(guid: uuid.UUID) -> bytes:
     fields = guid.fields
@@ -28,8 +29,11 @@ def create_config_file(guid_str: str, filepath: str, output_file: str):
         f.write(filepath_bytes)
 
 if __name__ == "__main__":
-    disk_guid = "1670c59e-e0e4-47cb-b9d9-6c8fbb118d38"
-    file_path = r"\boot\conf"
-    output_path = "conf.meta"
+    parser = argparse.ArgumentParser(description="Generate raw-byte config file with a disk GUID.")
+    parser.add_argument("disk_guid", help="The disk GUID to use.")
+    parser.add_argument("--file_path", default=r"\boot\conf", help="File path to include (default: \\boot\\conf)")
+    parser.add_argument("--output_path", default="conf.meta", help="Output file path (default: conf.meta)")
 
-    create_config_file(disk_guid, file_path, output_path)
+    args = parser.parse_args()
+
+    create_config_file(args.disk_guid, args.file_path, args.output_path)
