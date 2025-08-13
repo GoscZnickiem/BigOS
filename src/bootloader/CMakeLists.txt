@@ -73,3 +73,7 @@ add_custom_target(run-bootloader
     VERBATIM
     USES_TERMINAL
 )
+
+add_custom_target(bootloader_post_build ALL
+    DEPENDS efi-partition-structure
+)
