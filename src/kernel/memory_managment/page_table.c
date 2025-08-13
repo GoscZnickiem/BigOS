@@ -112,20 +112,26 @@ error_t page_table_destroy(page_table_entry_t* page_table) {
 }
 
 error_t page_table_add_entry(page_table_entry_t* page_table, page_size_t ps, vpn_t vpn, page_table_entry_t entry) {
+	DEBUG_PRINTF("PTAE entry\n");
 	u16 vpn_slice[5] = {
 	    (vpn >> 9 * 0) & 0x1ff, (vpn >> 9 * 1) & 0x1ff, (vpn >> 9 * 2) & 0x1ff,
 	    (vpn >> 9 * 3) & 0x1ff, (vpn >> 9 * 4) & 0x1ff,
 	};
-	u64(*current_page)[pt_entries_amount] = (u64(*)[pt_entries_amount])((ppn_t)(page_table->ppn) << 12);
+	DEBUG_PRINTF("PTAE t1 ppn: %lu\n", page_table->ppn);
+	u64* current_page = physical_to_effective(page_table->ppn << 12);
+	DEBUG_PRINTF("PTAE t2\n");
 	u8 pt_height = 0;
 	buffer_t pth_buff = kernel_config_get(KERCFG_PT_HEIGHT);
 	if (pth_buff.error)
 		return ERR_INTERNAL_FAILURE;
 	error_t err = buffer_read_u8(pth_buff, 0, &pt_height);
+	DEBUG_PRINTF("val: %d\n", pt_height);
 	if (err)
 		return ERR_INTERNAL_FAILURE;
+	DEBUG_PRINTF("PTAE loop\n");
 	for (i32 lvl = pt_height - 1; lvl > ps; --lvl) {
-		u64* current_riscv_pte = &(*current_page)[vpn_slice[lvl]];
+		DEBUG_PRINTF("lvl: %d\n", lvl);
+		u64* current_riscv_pte = &(current_page[vpn_slice[lvl]]);
 		page_table_entry_t current_pte = read_riscv_pte(*current_riscv_pte);
 		if ((current_pte.flags & PTEF_VALID) == 0) {
 			ppn_t new_ppn = 0;
@@ -138,9 +144,10 @@ error_t page_table_add_entry(page_table_entry_t* page_table, page_size_t ps, vpn
 			current_pte.flags |= entry.flags & (PTEF_GLOBAL | PTEF_USER);
 			*current_riscv_pte = write_riscv_pte(current_pte);
 		}
-		current_page = (u64(*)[pt_entries_amount])(current_pte.ppn << 12);
+		current_page = physical_to_effective(current_pte.ppn << 12);
 	}
-	(*current_page)[vpn_slice[ps]] = write_riscv_pte(entry);
+	current_page[vpn_slice[ps]] = write_riscv_pte(entry);
+	DEBUG_PRINTF("PTAE exit\n");
 	return ERR_NONE;
 }
 
