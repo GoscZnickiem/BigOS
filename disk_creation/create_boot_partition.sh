@@ -28,7 +28,7 @@ PART_DEV=${LOOP_DEV}p1
 
 sleep 1
 
-sudo mkfs.vfat -F 32 -n "$VOLUME_LABEL" $PART_DEV
+sudo mkfs.fat -F 32 -n "$VOLUME_LABEL" $PART_DEV
 
 mkdir boot_tmp/
 sudo mount $PART_DEV boot_tmp/
