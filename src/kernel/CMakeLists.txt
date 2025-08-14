@@ -10,7 +10,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 target_link_libraries(kernel PRIVATE Debug)
 endif()
 
-target_link_options(kernel PRIVATE -pie -e kinit --no-dynamic-linker)
+target_link_options(kernel PRIVATE -pie -e kinit)
 target_compile_options(kernel PRIVATE -fPIE -static -std=gnu23)
 
 COMPILE_BINARY(kernel)

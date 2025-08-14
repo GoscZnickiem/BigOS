@@ -86,11 +86,9 @@ void kernel_start(void) {
 	__asm__ volatile("mv ra, zero\n\t"
 	                 "mv a0, %[boot_hartid]\n\t"
 	                 "mv a1, %[g_fdt]\n\t"
-	                 "mv a2, %[test0]\n\t"
-	                 "mv a3, %[test1]\n\t"
 	                 "jr %[entry]"
 	                 :
-	                 : [boot_hartid] "r"(boot_hartid), [g_fdt] "r"(g_fdt), [entry] "r"(entry), [test0] "r"(g_kernel_app.physical_base), [test1] "r"(g_kernel_app.img_begin)
+	                 : [boot_hartid] "r"(boot_hartid), [g_fdt] "r"(g_fdt), [entry] "r"(entry)
 	                 : "memory");
 
 	while (1); // Kernel shouldn't return
