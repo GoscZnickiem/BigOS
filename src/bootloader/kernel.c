@@ -73,6 +73,9 @@ void kernel_start(void) {
 		exit();
 	}
 
+	log(L"FDT address: %lX", g_fdt);
+	log(L"Kernel address: %lX", g_kernel_app.physical_base);
+	log(L"Jumping to: %lX", g_kernel_app.entry_address);
 	log(L"Starting BigOS...");
 	status = g_system_table->BootServices->ExitBootServices(g_image_handle, map_key);
 	if (EFI_ERROR(status)) {
