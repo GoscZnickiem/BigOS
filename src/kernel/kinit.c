@@ -12,6 +12,8 @@
 [[noreturn]] void kinit([[maybe_unused]] volatile u64 boot_hartid, volatile phys_addr_t device_tree) {
 	dprintf("========== kinit start ==========\n");
 	DEBUG_PRINTF("kinit addr: %p\n", kinit);
+	DEBUG_PRINTF("test: %s\n", (const char* [5]){"elo zelo", "ta rakieta", "bomba", "lubie placki", "chuj"}[((u64)kinit >> 3) % 5]);
+	for(;;);
 
 	kernel_config_t kercfg = {0};
 	phys_addr_t ram_start = 0x80200000;                            // TODO: Read from DT
