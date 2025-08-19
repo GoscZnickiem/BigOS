@@ -22,6 +22,17 @@
 
 void* g_fdt;
 
+VOID print_guid(IN EFI_GUID *Guid) {
+    log(L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+          Guid->Data1,
+          Guid->Data2,
+          Guid->Data3,
+          Guid->Data4[0], Guid->Data4[1],
+          Guid->Data4[2], Guid->Data4[3],
+          Guid->Data4[4], Guid->Data4[5],
+          Guid->Data4[6], Guid->Data4[7]);
+}
+
 // FDT is created by u-boot and then passed into UEFI system table
 status_t get_FDT(void) {
 	START;
@@ -31,8 +42,14 @@ status_t get_FDT(void) {
 	for (UINTN index = 0; index < g_system_table->NumberOfTableEntries; ++index) {
 		entry = &g_system_table->ConfigurationTable[index];
 		if (guid_compare(&entry->VendorGuid, &fdt_guid)) {
+			print_guid(&entry->VendorGuid);
+			print_guid(&fdt_guid);
 			g_fdt = entry->VendorTable;
 			log(L"FDT address: %lX", g_fdt);
+			log(L"Contents:");
+			for(UINTN i = 0; i < 15; ++i) {
+				log(L"%lX", ((UINT64*)g_fdt)[i]);
+			}
 			RETURN(BOOT_SUCCESS);
 		}
 	}
